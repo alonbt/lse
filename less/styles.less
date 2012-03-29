@@ -1,0 +1,164 @@
+.rounded-corners (@radius: 5px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+.top-rounded-corners (@radius: 5px) {
+    -webkit-border-top-left-radius: @radius;
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-left-radius: @radius;
+    border-top-right-radius: @radius;
+}
+
+.first-gradient() {
+background-image: -moz-linear-gradient(bottom, rgb(224,239,252) 0pt, rgb(220,237,252) 12px, rgb(209,232,252) 14px, rgb(224,239,252) 28px);
+background-image: -webkit-linear-gradient(bottom, rgb(224,239,252) 0pt, rgb(220,237,252) 12px, rgb(209,232,252) 14px, rgb(224,239,252) 28px);
+}
+
+.hover-gradient() {
+background-image: -moz-linear-gradient(bottom, #D1E8FC 0%, #DAEDFD 100%);
+background-image: -webkit-linear-gradient(bottom, #D1E8FC 0%, #DAEDFD 100%);
+}
+
+.bgSprite(@x,@y) {
+  background: url("icon_sprite.png") no-repeat scroll @x @y transparent;  
+}
+
+@blue : #235383;
+
+
+
+body {
+    font-size:12px;
+    font-family: Helvetica,Arial,Georgia,"times new roman",times,serif;
+	background-color: #DDDDDD;
+    color: @blue;
+	#wrapper {
+        .rounded-corners (5px);
+        background-color: #FFFFFF;
+        padding: 2px 3px;
+        width: 400px;
+        a {
+            //text-decoration:none;
+            color: @blue;
+            bottom: 5px;
+            margin-left: 10px;
+            position: relative;
+            .img {
+                display: inline-block;
+                height: 17px;
+                position: relative;
+                top: 4px;
+                width: 17px;
+                margin-right:3px;
+            }
+            &#save .img{
+                .bgSprite(-46px,0);
+            }
+            &#delete .img{
+                .bgSprite(0,0);
+                width: 13px;
+            }
+            &#create_new .img{
+                .bgSprite(-14px,0);
+                width: 15px;
+            }
+            &#delete_all .img{
+                .bgSprite(0,0);
+                width: 13px;
+            }
+            &.editName .img{
+                .bgSprite(-30px,0);
+                width: 16px;
+            }
+            &.saveName { 
+                position: relative;
+                bottom:0;
+                right:4px;
+                .img{
+                    .bgSprite(-46px,0);
+                    width: 17px;
+                }
+            }
+        }
+	}  //End of #wrapper
+    header {
+        margin:8px 2px;
+        font-size:1.166em;
+        span.title {
+            font-weight:bold;
+        }// End of span.title
+        div#links {
+            float:right;
+            a {
+                
+                &#delete_all {
+                     
+                }
+                &#create_new {
+                     
+                }
+            }          
+        }// End of div#links
+    } //End of header
+    #ls_data {
+         .ls_row_wrapper {
+                .rounded-corners (5px);
+                background-color:#EEEEEE;
+                .first-gradient();
+                border: 1px solid lighten(@blue,30%);
+                margin-bottom: 4px;
+                cursor:pointer; 
+                text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+                div.header {
+                    padding: 8px;
+                    color: @blue;   
+                    span.ls_name {
+                        font-size:1.2em;
+                    }
+					a.editName {
+						float:right;
+						display:none;
+					}
+                    &:hover {
+                        a.editName {
+						    display:block;
+                        }
+					}
+                } //End of div.header      
+                div.content {
+                    margin: 8px;
+                    input {
+                        width:50%;   
+                    }
+                    .content_links {
+                        float:right;
+                        padding-top: 4px;
+                    } //End of .content_links
+                } //End of div.content
+                &.open {
+                    background-color:lighten(@blue,80%);
+                    background-image: none;
+                    &:hover {
+                          background-image: none;  
+                    }
+                    div.header {
+                        border-bottom: 1px solid #888888;
+                        padding-bottom: 8px;
+                        .hover-gradient();
+                        .top-rounded-corners();
+                    }
+                } //End of &.open
+                &:last-child {
+                    margin-bottom: 4px;
+                } //End of &:last-child
+                &:hover {
+                    .hover-gradient();
+                    border: 1px solid lighten(@blue,20%);
+                } //End of &:hover
+         } //End of .ls_row_wrapper
+    }   //End of #ls_data
+}

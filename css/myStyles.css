@@ -1,0 +1,11 @@
+/* CSS crunched with Crunch - http://crunchapp.net/ */
+body{font-size:12px;background-color:#DDDDDD;color:#235383;}body #wrapper{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;background-color:#FFFFFF;padding:2px 3px;width:400px;}body #wrapper a{color:#235383;}
+body header{margin:8px 2px;font-size:1.166em;}body header span.title{font-weight:bold;}
+body header div#links{float:right;}
+body #ls_data .ls_row_wrapper{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;background-color:#EEEEEE;background-image:-moz-linear-gradient(bottom, #e0effc 0pt, #dcedfc 12px, #d1e8fc 14px, #e0effc 28px);background-image:-webkit-linear-gradient(bottom, #e0effc 0pt, #dcedfc 12px, #d1e8fc 14px, #e0effc 28px);border:1px solid #689fd7;margin-bottom:4px;cursor:pointer;text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);}body #ls_data .ls_row_wrapper div.header{padding:8px;color:#235383;}
+body #ls_data .ls_row_wrapper div.content{margin:8px;}body #ls_data .ls_row_wrapper div.content input{width:70%;}
+body #ls_data .ls_row_wrapper div.content .content_links{float:right;padding-top:4px;}
+body #ls_data .ls_row_wrapper.open{background-color:#ffffff;background-image:none;}body #ls_data .ls_row_wrapper.open:hover{background-image:none;}
+body #ls_data .ls_row_wrapper.open div.header{border-bottom:1px solid #888888;padding-bottom:8px;}
+body #ls_data .ls_row_wrapper:last-child{margin-bottom:4px;}
+body #ls_data .ls_row_wrapper:hover{background-image:-moz-linear-gradient(bottom, #d1e8fc 0%, #daedfd 100%);background-image:-webkit-linear-gradient(bottom, #d1e8fc 0%, #daedfd 100%);border:1px solid #4086cc;}
