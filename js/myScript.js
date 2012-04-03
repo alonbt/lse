@@ -37,7 +37,12 @@ var ls = {
 	},
 	deleteRow : function(obj) {
 		obj.click(function(){
-			obj.closest('.ls_row_wrapper').remove();
+			obj.closest('.ls_row_wrapper').animate({opacity: 0},250,function(){
+				console.log('done');
+				$(this).animate({height: 0},250,function(){
+					$(this).remove();
+				});
+			});
 		});
 	},
 	valueKeyPress : function(obj) {
@@ -74,8 +79,12 @@ var ls = {
 	},
 	createNew : function() {
 			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data .ls_row_wrapper:first-child').find('.header').css({'height' : 0, 'overflow':'hidden'}).animate({'height':'21px'},500,function(){
+				$(this).css({'height':'','overflow' : ''});
+			});
 			ls.initSingleRow($('#ls_data .ls_row_wrapper:first-child'));
 			$('#ls_data .ls_row_wrapper:first-child').find('.editName').click();
+
 		},
 	AfterEditingValueNewRaw : function(obj) {
 		ls.onSave(obj);
