@@ -118,11 +118,14 @@ var ls = {
 				obj.prev().focus().bind('keypress.elementFocusout',function(e){
 					 var code = (e.keyCode ? e.keyCode : e.which);
 					 //on Enter
+					 var isTabBarOpen = obj.closest('.ls_row_wrapper').hasClass('open');
 					 if (code == 13) {
 					 	obj.removeClass('saveName');
 						ls.onSave(obj);
 						ls.p.camefromfocus = obj.parent().parent().index();
-						obj.closest('.header').removeClass('editMode').click();
+						if (!isTabBarOpen) {
+							obj.closest('.header').removeClass('editMode').click();
+						}
 						obj.closest('.ls_row_wrapper').find('input.ls_value').focus();
 						obj.prev().unbind('focusout.elementFocusout');
 						obj.prev().unbind('keypress.elementFocusout');
