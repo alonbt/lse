@@ -5,6 +5,7 @@ var ls = {
 		isEditValueInputClicked : false,
 		isEdit : false,
 		editedName : "",
+		camefromfocus : -1
 	},
 	init : function() {
 		ls.initHeights();
@@ -20,7 +21,7 @@ var ls = {
 		});
 		
 		//Edit Name Button
-		$('.editName').on('click',function(){
+		$('.editName').each(function(){
 			ls.editValueButton($(this));
 		});
 	},
@@ -50,46 +51,67 @@ var ls = {
 		});
 	},
 	createNew : function() {
-		console.log('here');
-		$('#ls_data .ls_row_wrapper:first-child').before('<div class="ls_row_wrapper" id="ls_row_wrapper_sample" style="display: none"><div class="header"><input type="text" value="InsertKeyName" class="ls_name_edit"> <a href="#" class="editName saveName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" id="ls_value"><div class="content_links"><a id="save" href="#"><span class="img"></span>Save</a>&nbsp;<a id="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
-		$('#ls_data .ls_row_wrapper:first-child').css('display','block').find('.content').css('display','none').find('.saveName').css('display','block');
-		$('#ls_data .ls_row_wrapper:first-child').css('display','block').find('.saveName').css('display','block').click(function(){
-			ls.onSave($(this));
-			$(this).css('display','');			
-			$('.ls_row_wrapper:first-child div.header').click(function() {
-				ls.singleTabToggeling($(this));
-			});
+			$('#ls_data .ls_row_wrapper:first-child').before('<div class="ls_row_wrapper" id="ls_row_wrapper_sample" style="display: none"><div class="header"><input type="text" value="InsertKeyName" class="ls_name_edit"> <a href="#" class="editName saveName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" id="ls_value"><div class="content_links"><a id="save" href="#"><span class="img"></span>Save</a>&nbsp;<a id="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data .ls_row_wrapper:first-child').css('display','block').find('.content').css('display','none').find('.saveName').css('display','block');
+			$('#ls_data .ls_row_wrapper:first-child').find('input.ls_name_edit').focus().bind('focusout.firstfocus',function(event){
+				ls.p.isEditValueClicked = false;
+				ls.AfterEditingValueNewRaw($(this).next());
+				
+				//Edit Name Button
+				$('#ls_data .ls_row_wrapper:first-child').find('.editName').on('click',function(){
+					ls.editValueButton($(this));
+				});
+				$('#ls_data .ls_row_wrapper:first-child').find('input.ls_name_edit').unbind('focusout.firstfocus')
+				
+			});	
 			
-		});
-
 		},
+	AfterEditingValueNewRaw : function(obj) {
+		ls.onSave(obj);
+		obj.css('display','');			
+		$('.ls_row_wrapper:first-child div.header').click(function() {
+			ls.singleTabToggeling(obj.parent());
+		});		
+	},
 	editValueButton : function(obj) {
-		ls.p.isEditValueClicked = true;
 		//On Edit
-		if (!ls.p.isEdit) {
-			obj.parent().css('padding','4px');
-			ls.p.editedName = obj.prev();
-			obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
-			obj.html('<span class="img"></span>Save');
-			obj.addClass('saveName');
-			ls.p.isEdit = true;
-						
-			obj.on('click',function(){
-			ls.editValueButton($(this));
-			});
-			
-			$('.ls_name_edit').click(function(){
-				ls.editValueInput($(this));
-			});
-			$('.ls_name_edit').focusout(function(event){
-				ls.onSave(obj);
-			});
-		} /*On Save */else {
-			ls.onSave(obj);
-		}
+		obj.click(function(){
+			var index = obj.parent().parent().index();
+			ls.p.isEditValueClicked = true;
+			if (!ls.p.isEdit && !(ls.p.camefromfocus == index)) {
+				ls.p.isEdit = true;
+				obj.parent().css('padding','4px');
+				ls.p.editedName = obj.prev();
+				obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
+				obj.prev().focus().bind('focusout.elementFocusout',function(){
+					obj.prev().unbind('focusout.elementFocusout');
+					ls.onSave(obj);
+					ls.p.camefromfocus = obj.parent().parent().index();
+				});
+				
+				obj.prev().bind('click',function(){
+					console.log('clicked');
+					ls.p.isEditValueInputClicked = true;
+				});
+				
+				obj.html('<span class="img"></span>Save');
+				//obj.html('');
+				obj.addClass('saveName');
+				
+			} else {
+				//ls.p.isEdit = true;
+			}
+			if (ls.p.camefromfocus) {
+				ls.p.camefromfocus = -1000;
+			}
+		});
+	
 	},
 	editValueInput : function(obj) {
 		ls.p.isEditValueInputClicked = true;
+	},
+	onEdit : function(obj) {
+	
 	},
 	onSave : function(obj) {
 		obj.parent().css('padding','8px');
