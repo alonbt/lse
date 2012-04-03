@@ -22,9 +22,15 @@ var ls = {
 		
 		//Delete All
 		$('#delete_all').click(function(){
-			$('.ls_row_wrapper').each(function(){
-				$(this).remove();
+			$('#ls_data').animate({'opacity':0},350,function(){
+				$(this).animate({'height':0},350,function(){
+					$('.ls_row_wrapper').each(function(){
+						$('#ls_data').css({'height':'','opacity':''});
+						$(this).remove();
+					});		
+				});
 			});
+
 		});
 		
 	},
