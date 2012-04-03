@@ -3,32 +3,32 @@ var ls = {
 		tabsHeight : [],
 		isEditValueClicked : false,
 		isEditValueInputClicked : false,
-		isEdit : false,
 		editedName : "",
 		camefromfocus : -1
 	},
 	init : function() {
 		ls.initHeights();
-		$('#ls_data .content').hide();
 		
-		//Activate toggle Buttons
-		ls.toggleTab();
+		//Edit Name Button
+		$('.ls_row_wrapper').each(function(){
+			ls.initSingleRow($(this));
+		});
 		
 		//Create New 
 		$('#create_new').click(function(e){
 			e.preventDefault();
 			ls.createNew();	
 		});
-		
-		//Edit Name Button
-		$('.editName').each(function(){
-			ls.editValueButton($(this));
-		});
 	},
-    toggleTab: function() {
-        $('.ls_row_wrapper div.header').click(function() {
-			ls.singleTabToggeling($(this));
-        });
+	initSingleRow : function(obj) {
+		ls.toggleTab(obj.find('div.header'));		
+		ls.editValueButton(obj.find('.editName'));
+	},
+    toggleTab: function(obj) {
+			obj.next('.content').hide();
+			obj.click(function() {
+				ls.singleTabToggeling(obj);
+			});
     },
 	singleTabToggeling : function(obj) {
 			if (!ls.p.isEditValueClicked && !ls.p.isEditValueInputClicked) {
@@ -51,24 +51,13 @@ var ls = {
 		});
 	},
 	createNew : function() {
-			$('#ls_data .ls_row_wrapper:first-child').before('<div class="ls_row_wrapper" id="ls_row_wrapper_sample" style="display: none"><div class="header"><input type="text" value="InsertKeyName" class="ls_name_edit"> <a href="#" class="editName saveName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" id="ls_value"><div class="content_links"><a id="save" href="#"><span class="img"></span>Save</a>&nbsp;<a id="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
-			$('#ls_data .ls_row_wrapper:first-child').css('display','block').find('.content').css('display','none').find('.saveName').css('display','block');
-			$('#ls_data .ls_row_wrapper:first-child').find('input.ls_name_edit').focus().bind('focusout.firstfocus',function(event){
-				ls.p.isEditValueClicked = false;
-				ls.AfterEditingValueNewRaw($(this).next());
-				
-				//Edit Name Button
-				$('#ls_data .ls_row_wrapper:first-child').find('.editName').on('click',function(){
-					ls.editValueButton($(this));
-				});
-				$('#ls_data .ls_row_wrapper:first-child').find('input.ls_name_edit').unbind('focusout.firstfocus')
-				
-			});	
-			
+			$('#ls_data .ls_row_wrapper:first-child').before('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" id="ls_value"><div class="content_links"><a id="save" href="#"><span class="img"></span>Save</a>&nbsp;<a id="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			ls.initSingleRow($('#ls_data .ls_row_wrapper:first-child'));
+			$('#ls_data .ls_row_wrapper:first-child').find('.editName').click();
 		},
 	AfterEditingValueNewRaw : function(obj) {
 		ls.onSave(obj);
-		obj.css('display','');			
+		//obj.css('display','');			
 		$('.ls_row_wrapper:first-child div.header').click(function() {
 			ls.singleTabToggeling(obj.parent());
 		});		
@@ -78,28 +67,26 @@ var ls = {
 		obj.click(function(){
 			var index = obj.parent().parent().index();
 			ls.p.isEditValueClicked = true;
-			if (!ls.p.isEdit && !(ls.p.camefromfocus == index)) {
-				ls.p.isEdit = true;
+			if (!(ls.p.camefromfocus == index) || !obj.hasClass('saveName')) {
 				obj.parent().css('padding','4px');
 				ls.p.editedName = obj.prev();
 				obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
+				obj.addClass('saveName');
 				obj.prev().focus().bind('focusout.elementFocusout',function(){
+					obj.removeClass('saveName');
 					obj.prev().unbind('focusout.elementFocusout');
 					ls.onSave(obj);
 					ls.p.camefromfocus = obj.parent().parent().index();
 				});
 				
 				obj.prev().bind('click',function(){
-					console.log('clicked');
 					ls.p.isEditValueInputClicked = true;
 				});
 				
 				obj.html('<span class="img"></span>Save');
 				//obj.html('');
-				obj.addClass('saveName');
 				
 			} else {
-				//ls.p.isEdit = true;
 			}
 			if (ls.p.camefromfocus) {
 				ls.p.camefromfocus = -1000;
@@ -115,13 +102,7 @@ var ls = {
 	},
 	onSave : function(obj) {
 		obj.parent().css('padding','8px');
-		obj.removeClass('saveName');
 		obj.prev().replaceWith('<span id="ls_name" class="ls_name">'+$('.ls_name_edit').val()+'</span>');
 		obj.html('<span class="img"></span>Edit value');
-		ls.p.isEdit = false;
-		
-		$('.saveName').click(function(){
-			ls.editValueButton($(this));
-		});	
 	}
 }
