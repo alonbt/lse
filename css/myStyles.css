@@ -1,5 +1,6 @@
 /* CSS crunched with Crunch - http://crunchapp.net/ */
-body{font-size:12px;font-family:Helvetica,Arial,Georgia,"times new roman",times,serif;background-color:#DDDDDD;color:#235383;}body #wrapper{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;background-color:#FFFFFF;padding:2px 3px;width:400px;}body #wrapper a{color:#235383;bottom:5px;margin-left:10px;position:relative;}body #wrapper a .img{display:inline-block;height:17px;position:relative;top:4px;width:17px;margin-right:3px;}
+body{font-size:12px;font-family:Helvetica,Arial,Georgia,"times new roman",times,serif;background-color:#DDDDDD;color:#235383;}body #wrapper{background-color:#FFFFFF;padding:2px 3px;width:400px;}body #wrapper a{opacity:0.8;color:#235383;bottom:5px;margin-left:10px;position:relative;}body #wrapper a:hover{opacity:1;}
+body #wrapper a .img{display:inline-block;height:17px;position:relative;top:4px;width:17px;margin-right:3px;}
 body #wrapper a.save .img{background:url("icon_sprite.png") no-repeat scroll -46px 0 transparent;}
 body #wrapper a.delete .img{background:url("icon_sprite.png") no-repeat scroll 0 0 transparent;width:13px;}
 body #wrapper a#create_new .img{background:url("icon_sprite.png") no-repeat scroll -14px 0 transparent;width:15px;}

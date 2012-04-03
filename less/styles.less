@@ -37,12 +37,14 @@ body {
 	background-color: #DDDDDD;
     color: @blue;
 	#wrapper {
-        .rounded-corners (5px);
         background-color: #FFFFFF;
         padding: 2px 3px;
         width: 400px;
         a {
-            //text-decoration:none;
+            opacity:0.8;
+            &:hover {
+                opacity:1;   
+            }
             color: @blue;
             bottom: 5px;
             margin-left: 10px;
@@ -95,12 +97,14 @@ body {
         div#links {
             float:right;
             a {
-                
                 &#delete_all {
                      
                 }
                 &#create_new {
                      
+                }
+                &:hover {
+                    
                 }
             }          
         }// End of div#links
