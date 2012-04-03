@@ -22,15 +22,17 @@ var ls = {
 		
 		//Delete All
 		$('#delete_all').click(function(){
-			$('#ls_data').animate({'opacity':0},350,function(){
-				$(this).animate({'height':0},350,function(){
-					$('.ls_row_wrapper').each(function(){
-						$('#ls_data').css({'height':'','opacity':''});
-						$(this).remove();
-					});		
+			if ($('.ls_row_wrapper').length > 0) 
+				{
+				$('#ls_data').animate({'opacity':0},350,function(){
+					$(this).animate({'height':0},350,function(){
+						$('.ls_row_wrapper').each(function(){
+							$('#ls_data').css({'height':'','opacity':''});
+							$(this).remove();
+						});		
+					});
 				});
-			});
-
+			}
 		});
 		
 	},
