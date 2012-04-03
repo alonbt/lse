@@ -106,10 +106,25 @@ var ls = {
 				obj.closest('.header').addClass('editMode');
 				obj.prev().focus().bind('focusout.elementFocusout',function(){
 					obj.removeClass('saveName');
-					obj.prev().unbind('focusout.elementFocusout');
 					ls.onSave(obj);
 					ls.p.camefromfocus = obj.parent().parent().index();
 					obj.closest('.header').removeClass('editMode');
+					obj.prev().unbind('focusout.elementFocusout');
+					obj.prev().unbind('keypress.elementFocusout');
+				});
+				
+				obj.prev().focus().bind('keypress.elementFocusout',function(e){
+					 var code = (e.keyCode ? e.keyCode : e.which);
+					 //on Enter
+					 if (code == 13) {
+					 	obj.removeClass('saveName');
+						ls.onSave(obj);
+						ls.p.camefromfocus = obj.parent().parent().index();
+						obj.closest('.header').removeClass('editMode').click();
+						obj.closest('.ls_row_wrapper').find('input.ls_value').focus();
+						obj.prev().unbind('focusout.elementFocusout');
+						obj.prev().unbind('keypress.elementFocusout');
+					 }
 				});
 				
 				obj.prev().bind('click',function(){
