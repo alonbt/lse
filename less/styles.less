@@ -115,6 +115,17 @@ body {
                 cursor:pointer; 
                 text-shadow: 0 1px 0 rgba(255,255,255,0.8);
                 div.header {
+                    div.indicationArrow {
+                        .bgSprite(-63px,0);
+                        display: inline-block;
+                        height: 10px;
+                        margin-right: 3px;
+                        position: relative;
+                        width: 10px;                                              
+                    }
+                    &.editMode div.indicationArrow{
+                        left:4px;
+                    }
                     padding: 8px;
                     color: @blue;   
                     span.ls_name {
@@ -151,6 +162,11 @@ body {
                         padding-bottom: 8px;
                         .hover-gradient();
                         .top-rounded-corners();
+                        div.indicationArrow {
+                            .bgSprite(-63px,-10px);
+                             right: 3px;
+                             top: 1px;
+                        }
                     }
                 } //End of &.open
                 &:last-child {

@@ -78,7 +78,7 @@ var ls = {
 		});
 	},
 	createNew : function() {
-			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><div class="indicationArrow">&nbsp;</div><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
 			$('#ls_data .ls_row_wrapper:first-child').find('.header').css({'height' : 0, 'overflow':'hidden'}).animate({'height':'21px'},500,function(){
 				$(this).css({'height':'','overflow' : ''});
 			});
@@ -103,11 +103,13 @@ var ls = {
 				ls.p.editedName = obj.prev();
 				obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
 				obj.addClass('saveName');
+				obj.closest('.header').addClass('editMode');
 				obj.prev().focus().bind('focusout.elementFocusout',function(){
 					obj.removeClass('saveName');
 					obj.prev().unbind('focusout.elementFocusout');
 					ls.onSave(obj);
 					ls.p.camefromfocus = obj.parent().parent().index();
+					obj.closest('.header').removeClass('editMode');
 				});
 				
 				obj.prev().bind('click',function(){
