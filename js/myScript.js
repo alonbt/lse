@@ -19,10 +19,32 @@ var ls = {
 			e.preventDefault();
 			ls.createNew();	
 		});
+		
+		//Delete All
+		$('#delete_all').click(function(){
+			$('.ls_row_wrapper').each(function(){
+				$(this).remove();
+			});
+		});
+		
 	},
 	initSingleRow : function(obj) {
 		ls.toggleTab(obj.find('div.header'));		
 		ls.editValueButton(obj.find('.editName'));
+		ls.deleteRow(obj.find('a.delete'));
+		ls.valueKeyPress(obj.find('input.ls_value'))
+		
+	},
+	deleteRow : function(obj) {
+		obj.click(function(){
+			obj.closest('.ls_row_wrapper').remove();
+		});
+	},
+	valueKeyPress : function(obj) {
+		console.log(obj);
+		obj.keypress(function(){
+			obj.val();
+		});
 	},
     toggleTab: function(obj) {
 			obj.next('.content').hide();
@@ -51,7 +73,7 @@ var ls = {
 		});
 	},
 	createNew : function() {
-			$('#ls_data .ls_row_wrapper:first-child').before('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" id="ls_value"><div class="content_links"><a id="save" href="#"><span class="img"></span>Save</a>&nbsp;<a id="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
 			ls.initSingleRow($('#ls_data .ls_row_wrapper:first-child'));
 			$('#ls_data .ls_row_wrapper:first-child').find('.editName').click();
 		},

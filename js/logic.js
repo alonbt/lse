@@ -3,7 +3,7 @@ function createEntry(key, value)
     var element = $('#ls_row_wrapper_sample').clone();
 
     $("#ls_name", element).html(key);
-    $("#ls_value", element).val(value);
+    $(".ls_value", element).val(value);
 
     element.show();
     $("#ls_data").append(element);
