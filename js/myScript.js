@@ -28,13 +28,15 @@ var ls = {
 					$(this).animate({'height':0},350,function(){
 						$('.ls_row_wrapper').each(function(){
 							$('#ls_data').css({'height':'','opacity':''});
+							var key = $(this).find('.ls_name').html();
+							//var value = $(this).find('input.ls_value').val();
+							localStorage.removeItem(key);
 							$(this).remove();
 						});		
 					});
 				});
 			}
-		});
-		
+		});		
 	},
 	initSingleRow : function(obj) {
 		ls.toggleTab(obj.find('div.header'));		
@@ -46,17 +48,19 @@ var ls = {
 	deleteRow : function(obj) {
 		obj.click(function(){
 			obj.closest('.ls_row_wrapper').animate({opacity: 0},250,function(){
-				console.log('done');
 				$(this).animate({height: 0},250,function(){
+					var key = $(this).find('.ls_name').html();
+					localStorage.removeItem(key);
 					$(this).remove();
 				});
 			});
 		});
 	},
 	valueKeyPress : function(obj) {
-		console.log(obj);
-		obj.keypress(function(){
-			obj.val();
+		obj.keyup(function(){
+			var key = obj.closest('.ls_row_wrapper').find('.ls_name').html();
+			var value = obj.val();
+			localStorage.setItem(key,value);
 		});
 	},
     toggleTab: function(obj) {
@@ -112,9 +116,22 @@ var ls = {
 				obj.parent().css('padding','4px');
 				ls.p.editedName = obj.prev();
 				obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
+				var previousKey = obj.prev().val();
 				obj.addClass('saveName');
 				obj.closest('.header').addClass('editMode');
 				obj.prev().focus().bind('focusout.elementFocusout',function(){
+				
+					//Local Storage
+					var key = obj.prev().val();
+					console.log(key,previousKey.toString());
+					if (key != previousKey) {
+						var value = obj.closest('.ls_row_wrapper').find('input.ls_value').val();
+						console.log(previousKey.toString());
+						localStorage.removeItem(previousKey.toString());
+						localStorage.setItem(key.toString(),value);
+					}	
+
+					//Design
 					obj.removeClass('saveName');
 					ls.onSave(obj);
 					ls.p.camefromfocus = obj.parent().parent().index();
