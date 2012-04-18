@@ -7,7 +7,7 @@ body #wrapper a#create_new .img{background:url("icon_sprite.png") no-repeat scro
 body #wrapper a#delete_all .img{background:url("icon_sprite.png") no-repeat scroll 0 0 transparent;width:13px;}
 body #wrapper a.editName .img{background:url("icon_sprite.png") no-repeat scroll -30px 0 transparent;width:16px;}
 body #wrapper a.saveName{right:4px;}body #wrapper a.saveName .img{background:url("icon_sprite.png") no-repeat scroll -46px 0 transparent;width:17px;}
-body #wrapper a.saveName.saved{opacity:0.3;text-decoration:none;}
+body #wrapper a.saveName.saved{opacity:0.3;text-decoration:none;cursor:default;}
 body header{margin:8px 2px;font-size:1.166em;}body header span.title{font-weight:bold;}
 body header div#links{float:right;}
 body #ls_data .ls_row_wrapper{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;background-color:#EEEEEE;background-image:-moz-linear-gradient(bottom, #e0effc 0pt, #dcedfc 12px, #d1e8fc 14px, #e0effc 28px);background-image:-webkit-linear-gradient(bottom, #e0effc 0pt, #dcedfc 12px, #d1e8fc 14px, #e0effc 28px);border:1px solid #689fd7;margin-bottom:4px;cursor:pointer;text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);}body #ls_data .ls_row_wrapper div.header{padding:8px;color:#235383;}body #ls_data .ls_row_wrapper div.header div.indicationArrow{background:url("icon_sprite.png") no-repeat scroll -63px 0 transparent;display:inline-block;height:10px;margin-right:3px;position:relative;width:10px;}
