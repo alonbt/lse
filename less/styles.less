@@ -57,8 +57,17 @@ body {
                 width: 17px;
                 margin-right:3px;
             }
-            &.save .img{
-                .bgSprite(-46px,0);
+            &.saveKey {
+                display:none;
+                text-decoration: none;
+                .img{
+                     .bgSprite(-46px,0);
+                }
+                &.saved {
+                    display: inline;
+                    opacity: 1; 
+                    cursor: default;
+                }               
             }
             &.delete .img{
                 .bgSprite(0,0);
@@ -79,14 +88,13 @@ body {
             &.saveName { 
                 /*display: none !important;*/
                 right:4px;
+                text-decoration: none;
+                display: none;
+                position:relative;
+                top: 1px;
                 .img{
                     .bgSprite(-46px,0);
                     width: 17px;
-                }
-                &.saved {
-                    opacity: 0.3; 
-                    text-decoration: none;
-                    cursor: default;
                 }
             }
         }

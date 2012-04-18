@@ -1,13 +1,19 @@
 {
-    "name": "Local Storage Manager",
-    "version": "1.0",
-    "description": "A simple yet powerfull extension to manage localStorage objects",
+    "name": "LocalStorage DevTool",
+    "version": "1.1",
+    "description": "A simple yet powerfull extension to manage localStorage objects from other sites",
     "background_page": "background.html",
     "browser_action": {
-        "default_icon": "icon.png",
+        "default_icon": "icon64.png",
         "default_title": "Manage localStorage",
         "default_popup": "index.html"
     },
+	"icons": 
+	{ 
+		"16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png" 
+	},
     "permissions": [
         "tabs", "*://*"
     ],

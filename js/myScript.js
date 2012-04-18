@@ -105,11 +105,20 @@ var ls = {
 	valueKeyPress : function(obj) {
 		obj.keyup(function(){
 			var key = obj.closest('.ls_row_wrapper').find('.ls_name').html();
-			obj.closest('.ls_row_wrapper').find('.saveName').addClass('saved').html('Saved');
+			obj.closest('.ls_row_wrapper').find('.saveKey').addClass('saved').html('<span class="img"></span>Saved');
 			var value = obj.val();
 
 			ls.currentLocalStorage[key] = value;
 			ls.sendCurrentLocalStorage();
+		});
+		obj.focusout(function(){
+			var currentObj = $(this);
+			$('.saveKey').each(function(){
+				if ($(this) != currentObj)
+				{
+					$(this).removeClass('saved').html('<span class="img"></span>Save');
+				}
+			});
 		});
 	},
     toggleTab: function(obj) {
@@ -123,7 +132,7 @@ var ls = {
 				obj.next().slideToggle('fast');
 				obj.parent().toggleClass('open');
 			}
-			$('.saveName').each(function(){
+			$('.saveKey').each(function(){
 				$(this).removeClass('saved').html('<span class="img"></span>Save');
 			});
 			ls.p.isEditValueClicked = false;
@@ -142,7 +151,7 @@ var ls = {
 		});
 	},
 	createNew : function() {
-			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><div class="indicationArrow">&nbsp;</div><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="saveName" href="#"><span class="img"></span>Save</a><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><div class="indicationArrow">&nbsp;</div><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="saveKey" href="#"><span class="img"></span>Save</a><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
 			$('#ls_data .ls_row_wrapper:first-child').css({'height' : 0, 'overflow':'hidden', 'opacity' : '0'}).animate({'height':'34px'},250,function(){
 				$(this).animate({'opacity' : '1'},250, function() {
 					$(this).css({'height':'','overflow' : ''});
@@ -219,6 +228,7 @@ var ls = {
 						obj.prev().unbind('focusout.elementFocusout');
 						obj.prev().unbind('keypress.elementFocusout');
 						
+						
 						//Local Storage
 						var key = obj.prev().html();
 
@@ -228,7 +238,7 @@ var ls = {
 							//console.log(previousKey.toString());
 	
 							ls.keyChangedTo(previousKey, key, value);
-						}	
+						}
 					 }
 				});
 				
