@@ -2,9 +2,20 @@
     "name": "Local Storage Manager",
     "version": "1.0",
     "description": "A simple yet powerfull extension to manage localStorage objects",
+    "background_page": "background.html",
     "browser_action": {
         "default_icon": "icon.png",
         "default_title": "Manage localStorage",
         "default_popup": "index.html"
-    }
+    },
+    "permissions": [
+        "tabs", "*://*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["js/contentscript.js"],
+            "all_frames": true
+        }
+    ]
 }

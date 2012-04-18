@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <script>
+        	var tabsLocalStorage = []; // tabId => localStorage string
+        	var tabsPorts = []; // tabId => port
+        	var currentTabId = null;
+        	
+            // callbacks for tabs
+            chrome.tabs.onActivated.addListener(function(activeInfo) {
+            	currentTabId = activeInfo.tabId;
+            });
+            
+            chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+            	currentTabId = tabId;
+            });
+            
+            chrome.tabs.onCreated.addListener(function(tab) {
+            	currentTabId = tab.id;
+            });
+            
+            // get local storage or set local storage
+            chrome.extension.onRequest.addListener(
+			  function(request, sender, sendResponse) {
+			  		if (request.route == 'contentscript')
+			  		{
+			  			// get local storage from contentscript.js
+			    		tabsLocalStorage[sender.tab.id] = request.data;
+			  		}
+			  		else if (request.route = 'myScript')
+			  		{
+			  			// get new localstorage from myScript, send it to contentscript.js
+			  			if (tabsPorts[currentTabId])
+			  			{
+			  				tabsPorts[currentTabId].postMessage(request.data);
+			  			}
+			  		}
+			    }
+			);
+			
+			// send local storage to myScript.js
+			chrome.extension.onConnect.addListener(function(port)
+            {
+            	if (port.name == 'myScript')
+            	{
+            		var _localStorage = tabsLocalStorage[currentTabId] ? tabsLocalStorage[currentTabId] : [];
+                	port.postMessage(_localStorage);
+            	}
+            	else if (port.name == 'contentscript')
+            	{
+            		tabsPorts[currentTabId] = port;
+            	}
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

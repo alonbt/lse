@@ -1,4 +1,6 @@
 var ls = {
+	currentLocalStorage: [],
+	
 	p : {
 		tabsHeight : [],
 		isEditValueClicked : false,
@@ -7,8 +9,16 @@ var ls = {
 		camefromfocus : -1
 	},
 	init : function() {
+		ls.getCurrentLocalStorage();
+	},
+	
+	initAfterGotLocalStorage: function() {
+		for(var key in ls.currentLocalStorage)
+		{
+		    ls.createEntry(key, ls.currentLocalStorage[key]);
+		}
+   
 		ls.initHeights();
-		
 		//Edit Name Button
 		$('.ls_row_wrapper').each(function(){
 			ls.initSingleRow($(this));
@@ -30,14 +40,47 @@ var ls = {
 							$('#ls_data').css({'height':'','opacity':''});
 							var key = $(this).find('.ls_name').html();
 							//var value = $(this).find('input.ls_value').val();
-							localStorage.removeItem(key);
+
 							$(this).remove();
 						});		
 					});
 				});
 			}
+			
+			ls.currentLocalStorage = [];
+			ls.sendCurrentLocalStorage();
 		});		
 	},
+	
+	getCurrentLocalStorage: function()
+	{
+		var port = chrome.extension.connect({name: 'myScript'});
+		port.onMessage.addListener(function(msg) {
+			if (msg)
+			{
+		    	ls.currentLocalStorage = JSON.parse(msg);
+			}
+			
+			ls.initAfterGotLocalStorage();
+		});
+	},
+	
+	sendCurrentLocalStorage: function()
+	{
+		chrome.extension.sendRequest({'route': 'myScript', 'data': JSON.stringify(ls.currentLocalStorage)});
+	},
+	
+	createEntry: function(key, value)
+	{
+		var element = $('#ls_row_wrapper_sample').clone();
+	
+	    $("#ls_name", element).html(key);
+	    $(".ls_value", element).val(value);
+	
+	    element.show();
+	    $("#ls_data").append(element);
+	},
+	
 	initSingleRow : function(obj) {
 		ls.toggleTab(obj.find('div.header'));		
 		ls.editValueButton(obj.find('.editName'));
@@ -49,18 +92,24 @@ var ls = {
 		obj.click(function(){
 			obj.closest('.ls_row_wrapper').animate({opacity: 0},250,function(){
 				$(this).animate({height: 0},250,function(){
-					var key = $(this).find('.ls_name').html();
-					localStorage.removeItem(key);
 					$(this).remove();
 				});
 			});
+			
+			var key = obj.closest('.ls_row_wrapper').find('.ls_name').html();
+
+			delete ls.currentLocalStorage[key];
+			ls.sendCurrentLocalStorage();
 		});
 	},
 	valueKeyPress : function(obj) {
 		obj.keyup(function(){
 			var key = obj.closest('.ls_row_wrapper').find('.ls_name').html();
+			obj.closest('.ls_row_wrapper').find('.saveName').addClass('saved').html('Saved');
 			var value = obj.val();
-			localStorage.setItem(key,value);
+
+			ls.currentLocalStorage[key] = value;
+			ls.sendCurrentLocalStorage();
 		});
 	},
     toggleTab: function(obj) {
@@ -74,6 +123,9 @@ var ls = {
 				obj.next().slideToggle('fast');
 				obj.parent().toggleClass('open');
 			}
+			$('.saveName').each(function(){
+				$(this).removeClass('saved').html('<span class="img"></span>Save');
+			});
 			ls.p.isEditValueClicked = false;
 			ls.p.isEditValueInputClicked = false;
 	},
@@ -90,7 +142,7 @@ var ls = {
 		});
 	},
 	createNew : function() {
-			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><div class="indicationArrow">&nbsp;</div><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
+			$('#ls_data').prepend('<div class="ls_row_wrapper" id="ls_row_wrapper_sample"><div class="header"><div class="indicationArrow">&nbsp;</div><span id="ls_name" class="ls_name">New Field</span> <a href="#" class="editName"><span class="img"></span>Save Value</a></div><div class="content"><input type="text" value="Enter Value" class="ls_value"><div class="content_links"><a class="saveName" href="#"><span class="img"></span>Save</a><a class="delete" href="#"><span class="img"></span>Delete</a></div></div></div>')
 			$('#ls_data .ls_row_wrapper:first-child').css({'height' : 0, 'overflow':'hidden', 'opacity' : '0'}).animate({'height':'34px'},250,function(){
 				$(this).animate({'opacity' : '1'},250, function() {
 					$(this).css({'height':'','overflow' : ''});
@@ -107,6 +159,15 @@ var ls = {
 			ls.singleTabToggeling(obj.parent());
 		});		
 	},
+	
+	keyChangedTo: function(previousKey, key, value)
+	{
+		delete ls.currentLocalStorage[previousKey];
+		ls.currentLocalStorage[key] = value
+		
+		ls.sendCurrentLocalStorage();
+	},
+	
 	editValueButton : function(obj) {
 		//On Edit
 		obj.click(function(){
@@ -117,18 +178,20 @@ var ls = {
 				ls.p.editedName = obj.prev();
 				obj.prev().replaceWith('<input type="text" class="ls_name_edit" value="' + ls.p.editedName.html() + '">');
 				var previousKey = obj.prev().val();
+
 				obj.addClass('saveName');
 				obj.closest('.header').addClass('editMode');
 				obj.prev().focus().bind('focusout.elementFocusout',function(){
-				
+
 					//Local Storage
 					var key = obj.prev().val();
-					console.log(key,previousKey.toString());
+
+					//console.log(key,previousKey.toString());
 					if (key != previousKey) {
 						var value = obj.closest('.ls_row_wrapper').find('input.ls_value').val();
-						console.log(previousKey.toString());
-						localStorage.removeItem(previousKey.toString());
-						localStorage.setItem(key.toString(),value);
+						//console.log(previousKey.toString());
+
+						ls.keyChangedTo(previousKey, key, value);
 					}	
 
 					//Design
@@ -139,6 +202,7 @@ var ls = {
 					obj.prev().unbind('focusout.elementFocusout');
 					obj.prev().unbind('keypress.elementFocusout');
 				});
+				
 				
 				obj.prev().focus().bind('keypress.elementFocusout',function(e){
 					 var code = (e.keyCode ? e.keyCode : e.which);
@@ -154,6 +218,17 @@ var ls = {
 						obj.closest('.ls_row_wrapper').find('input.ls_value').focus();
 						obj.prev().unbind('focusout.elementFocusout');
 						obj.prev().unbind('keypress.elementFocusout');
+						
+						//Local Storage
+						var key = obj.prev().html();
+
+						//console.log(key,previousKey.toString());
+						if (key != previousKey) {
+							var value = obj.closest('.ls_row_wrapper').find('input.ls_value').val();
+							//console.log(previousKey.toString());
+	
+							ls.keyChangedTo(previousKey, key, value);
+						}	
 					 }
 				});
 				
